@@ -1,0 +1,39 @@
+name: Build and Push Frontend
+
+on:
+  push:
+    branches:
+      - main
+      - development  # Вы можете добавить другие ветки по вашему выбору
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Работает на последней версии Ubuntu
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2  # Клонирует репозиторий на GitHub
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '19'  # Указываем версию Node.js (поменяйте по необходимости)
+
+      - name: Install dependencies
+        run: npm install  # Устанавливаем зависимости из package.json
+
+      - name: Build React app
+        run: npm run build  # Строим приложение для продакшн
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}  # Логин для Docker Hub, хранится в секретах GitHub
+          password: ${{ secrets.DOCKER_PASSWORD }}  # Пароль для Docker Hub, хранится в секретах GitHub
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .  # Указывает контекст сборки (текущая директория)
+          push: true  # Пушим образ в Docker Hub
+          tags: plushken/react-app:latest  # Тегируем образ с правильным названием репозитория на Docker Hub
