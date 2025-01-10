@@ -1,0 +1,34 @@
+version: '3'  # Указываем версию
+
+services:
+  express-app:
+    image: plushken/express-app:latest  # Используем внешний образ для Express
+    ports:
+      - '3000:3000'  # Пробрасываем порт 3000
+    environment:
+      DATABASE_URL: 'mongodb://db:27017/mydatabase'  # Используем имя контейнера MongoDB как хост
+    depends_on:
+      - db  # Указываем, что Express зависит от базы данных MongoDB
+    networks:
+      - app-network  # Присваиваем нужную сеть
+
+  db:
+    image: mongo:latest  # Используем внешний образ для MongoDB
+    ports:
+      - '27017:27017'  # Пробрасываем порт 27017 для MongoDB
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: radikravinskij5
+      MONGO_INITDB_ROOT_PASSWORD: StrongPass
+    networks:
+      - app-network  # Присваиваем нужную сеть
+
+  react-app:
+    image: plushken/react-app:latest  # Используем внешний образ для React
+    ports:
+      - '80:80'  # Пробрасываем порт 80 для React
+    networks:
+      - app-network  # Присваиваем нужную сеть
+
+networks:
+  app-network:
+    driver: bridge  # Используем мостовую сеть для взаимодействия сервисов
