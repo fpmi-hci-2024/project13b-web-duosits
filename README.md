@@ -1,50 +1,42 @@
-# React + TypeScript + Vite
+# Для запуска проекта, необходимо выполнить следующие шаги:
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+1. Склонировать репозиторий с api по ссылке https://github.com/brian7346/express-threads-api.git на свой компьютер.
+```
+git clone https://github.com/brian7346/express-threads-api.git
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+2. Склонировать репозиторий с клиентским приложением по ссылке [https://github.com/brian7346/react-threads.git](https://github.com/brian7346/react-client) на свой компьютер.
+```
+git clone https://github.com/brian7346/react-threads.git
+```
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+3. Открыть терминал (или командную строку) и перейти в корневую директорию сервера.
+```
+cd express-threads-api
+```
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+4. Переименовать файл .env.local (убрать .local)
+```
+.env
+```
+
+5. Запустить команду docker compose которая поднимет сервер, клиент и базу данных
+```
+docker compose up
+```
+
+6. Открыть браузер и перейти по адресу http://localhost:80, чтобы увидеть запущенный проект.
+
+
+
+# Если вы хотите скачать образ базы данных MongoDB
+
+Запустите контейнер с образом MongoDB и настройками replica set (он автоматичиски скачает и запустит этот образ):
+
+```
+  docker run --name mongo \
+       -p 27017:27017 \
+       -e MONGO_INITDB_ROOT_USERNAME="monty" \
+       -e MONGO_INITDB_ROOT_PASSWORD="pass" \
+       -d prismagraphql/mongo-single-replica:5.0.3
 ```
